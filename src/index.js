@@ -24,8 +24,12 @@ function populateProperties(propertiesObj) {
             
             let h2 = document.createElement("h2")
             h2.innerText = building.name
+            let buildingBody = document.createElement("p")
+            buildingBody.innerText = 
+                `Cost to Secure: ${building.cost}`
 
             buildingDiv.appendChild(h2)
+            buildingDiv.appendChild(buildingBody)
         }
     }
     console.log("hello")
