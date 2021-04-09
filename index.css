@@ -1,6 +1,19 @@
 #header{
-    background: rgb(133, 214, 137);
+    background: rgb(16, 71, 19);
+    color: #aaa;
     height: 50px;
     width: 500px;
     margin: auto;
+}
+
+.property{
+    background: rgb(145, 216, 149);
+    height: 500px;
+    width: 500px;
+}
+
+.buildings{
+    background: rgb(128, 121, 218);
+    height: 100px;
+    width: 400px;
 }
