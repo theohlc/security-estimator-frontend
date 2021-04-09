@@ -10,6 +10,7 @@
     background: rgb(145, 216, 149);
     height: 500px;
     width: 500px;
+    display: inline-grid;
 }
 
 .buildings{
