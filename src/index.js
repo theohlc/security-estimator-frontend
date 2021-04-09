@@ -35,6 +35,49 @@ function renderProperty(propertyObj) {
         buildingDiv.appendChild(h2)
         buildingDiv.appendChild(buildingBody)
     }
+
+    const form = document.createElement("form");
+
+    const num_ground_windows = document.createElement("input");
+    num_ground_windows.setAttribute("type", "integer");
+    num_ground_windows.setAttribute("name", "num_ground_windows");
+
+    const num_high_windows   = document.createElement("input");
+    num_high_windows.setAttribute("type", "integer");
+    num_high_windows.setAttribute("name", "num_high_windows");
+
+    const name               = document.createElement("input");
+    name.setAttribute("type", "text");
+    name.setAttribute("name", "name");
+
+    const num_doors          = document.createElement("input");
+    num_doors.setAttribute("type", "integer");
+    num_doors.setAttribute("name", "num_doors");
+
+    const num_vehicle_doors  = document.createElement("input");
+    num_vehicle_doors.setAttribute("type", "integer");
+    num_vehicle_doors.setAttribute("name", "num_vehicle_doors");
+
+    const building_submit    = document.createElement("button");
+    building_submit.setAttribute("type", "button");
+    building_submit.textContent = "Add Building"
+
+    const br = document.createElement("br");
+
+    div.appendChild(form);
+    form.appendChild(name);
+    form.appendChild(br.cloneNode());
+    form.appendChild(num_ground_windows);
+    form.appendChild(br.cloneNode());
+    form.appendChild(num_high_windows);
+    form.appendChild(br.cloneNode());
+    form.appendChild(num_doors);
+    form.appendChild(br.cloneNode());
+    form.appendChild(num_vehicle_doors);
+    form.appendChild(br.cloneNode());
+    form.appendChild(br.cloneNode());
+    form.appendChild(building_submit);
+
 }
 
 function postProperty(propertyData) {
