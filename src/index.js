@@ -45,8 +45,7 @@ function postProperty(propertyData) {
       body: JSON.stringify({
         "property_info" :
             {"name"         : propertyData.name.value,
-            "fence_length"  : propertyData.fence_length.value,
-            "owner"         : "McDonalds"}
+            "fence_length"  : propertyData.fence_length.value}
 
       })
     })
