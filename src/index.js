@@ -1,38 +1,40 @@
+const properties = document.getElementById("Properties")
+
 function populateProperties(propertiesObj) {
-    const properties = document.getElementById("Properties")
     for (let i = 0; i < propertiesObj.length; i++) {
-        const property = propertiesObj[i];
-        
-        const div = properties.appendChild(
+        renderProperty(propertiesObj[i])
+    }
+}
+
+function renderProperty(propertyObj) {
+    const div = properties.appendChild(
+        document.createElement("div")
+    )
+    div.className = "property"
+
+    let h1 = document.createElement("h1")
+    h1.innerText = propertyObj.name
+
+    div.appendChild(h1)
+
+    const buildings = propertyObj["buildings"]
+    
+    for (let j = 0; j < buildings.length; j++) {
+        const building = buildings[j];
+        const buildingDiv = div.appendChild(
             document.createElement("div")
         )
-        div.className = "property"
-
-        let h1 = document.createElement("h1")
-        h1.innerText = property.name
-
-        div.appendChild(h1)
-
-        const buildings = property["buildings"]
+        buildingDiv.className = "buildings"
         
-        for (let j = 0; j < buildings.length; j++) {
-            const building = buildings[j];
-            const buildingDiv = div.appendChild(
-                document.createElement("div")
-            )
-            buildingDiv.className = "buildings"
-            
-            let h2 = document.createElement("h2")
-            h2.innerText = building.name
-            let buildingBody = document.createElement("p")
-            buildingBody.innerText = 
-                `Cost to Secure: ${building.cost}`
+        let h2 = document.createElement("h2")
+        h2.innerText = building.name
+        let buildingBody = document.createElement("p")
+        buildingBody.innerText = 
+            `Cost to Secure: ${building.cost}`
 
-            buildingDiv.appendChild(h2)
-            buildingDiv.appendChild(buildingBody)
-        }
+        buildingDiv.appendChild(h2)
+        buildingDiv.appendChild(buildingBody)
     }
-    console.log("hello")
 }
 
 function postProperty(propertyData) {
@@ -53,7 +55,7 @@ function postProperty(propertyData) {
         return response.json();
     })
     .then(function(object) {
-        console.log(object)
+        renderProperty(object)
     })
 }
 
