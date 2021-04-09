@@ -35,6 +35,29 @@ function populateProperties(propertiesObj) {
     console.log("hello")
 }
 
+function postProperty(propertyData) {
+    fetch('http://localhost:3000/properties', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        "property_info" :
+            {"name"         : propertyData.name.value,
+            "fence_length"  : propertyData.fence_length.value,
+            "owner"         : "McDonalds"}
+
+      })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(object) {
+        console.log(object)
+    })
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     fetch("http://localhost:3000/properties")
         .then(function(response) {
@@ -43,4 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(function(object) {
                 populateProperties(object)
         })
+})
+
+document.addEventListener("submit", (event) => {
+    event.preventDefault();
+    postProperty(event.target)
 })
