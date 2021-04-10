@@ -28,6 +28,12 @@ function renderProperty(propertyObj) {
     const buildings = propertyObj["buildings"]
     
     renderBuildingForm(div, propertyObj);
+    showFormButton = document.createElement("button");
+    showFormButton.setAttribute("type", "button");
+    showFormButton.setAttribute("class", "showFormButton");
+    showFormButton.setAttribute("id", propertyObj.id);
+    showFormButton.textContent = "Add Building"
+    div.appendChild(showFormButton)
 
     for (let j = 0; j < buildings.length; j++) {
         renderBuilding(buildings[j], div)
@@ -195,9 +201,14 @@ document.addEventListener("submit", (event) => {
 document.addEventListener("click", (event) => {
     if (event.target.className == "building_submit") {
         postBuilding(event.target.parentElement, event.target.parentElement.parentElement);
+        event.target.parentElement.style.display = "none";
+        event.target.parentElement.parentElement.children[2].style.display = "";
     } else if (event.target.className == "property_destroy") {
         destroyProperty(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement);
     } else if (event.target.className == "building_destroy") {
         destroyBuilding(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement);
+    } else if (event.target.className == "showFormButton") {
+        event.target.parentElement.children[1].style.display = "";
+        event.target.style.display = "none";
     }
 })
