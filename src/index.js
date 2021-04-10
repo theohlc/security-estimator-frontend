@@ -83,16 +83,22 @@ function renderBuilding(buildingObj, div) {
     const buildingDiv = div.appendChild(
         document.createElement("div")
     )
-    buildingDiv.className = "buildings"
+    buildingDiv.className = "buildings";
+    buildingDiv.id = buildingObj.id;
     
-    let h2 = document.createElement("h2")
-    h2.innerText = buildingObj.name
-    let buildingBody = document.createElement("p")
+    let h2 = document.createElement("h2");
+    h2.innerText = buildingObj.name;
+    let x = document.createElement("button");
+    x.setAttribute("type", "button");
+    x.className = "building_destroy";
+    x.textContent = "X";
+    h2.appendChild(x)
+    let buildingBody = document.createElement("p");
     buildingBody.innerText = 
-        `Cost to Secure: ${buildingObj.cost}`
+        `Cost to Secure: ${buildingObj.cost}`;
 
-    buildingDiv.appendChild(h2)
-    buildingDiv.appendChild(buildingBody)
+    buildingDiv.appendChild(h2);
+    buildingDiv.appendChild(buildingBody);
 }
 
 function postProperty(propertyData) {
@@ -156,6 +162,17 @@ function destroyProperty(propertyId, propertyDiv) {
     propertyDiv.remove();
 }
 
+function destroyBuilding(buildingId, buildingDiv) {
+    fetch(`http://localhost:3000/buildings/${buildingId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: "application/json"
+        }
+    });
+    buildingDiv.remove();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     fetch("http://localhost:3000/properties")
         .then(function(response) {
@@ -175,7 +192,8 @@ document.addEventListener("click", (event) => {
     if (event.target.className == "building_submit") {
         postBuilding(event.target.parentElement, event.target.parentElement.parentElement);
     } else if (event.target.className == "property_destroy") {
-        console.log(event.target)
-        destroyProperty(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement)
+        destroyProperty(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement);
+    } else if (event.target.className == "building_destroy") {
+        destroyBuilding(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement);
     }
 })
