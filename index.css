@@ -8,7 +8,7 @@
 
 .property{
     background: rgb(145, 216, 149);
-    height: 500px;
+    height: auto;
     width: 500px;
     padding: 10px;
     margin: 10px 20px;
