@@ -18,11 +18,15 @@ function renderProperty(propertyObj) {
 
     div.appendChild(h1)
 
+    let x = document.createElement("button");
+    x.setAttribute("type", "button");
+    x.className = "property_destroy";
+    x.textContent = "X";
+
+    h1.appendChild(x)
+
     const buildings = propertyObj["buildings"]
     
-    for (let j = 0; j < buildings.length; j++) {
-        renderBuilding(buildings[j], div)
-    }
 
     const form = document.createElement("form");
     form.className = "buildingForm";
@@ -68,6 +72,10 @@ function renderProperty(propertyObj) {
     form.appendChild(br.cloneNode());
     form.appendChild(br.cloneNode());
     form.appendChild(building_submit);
+
+    for (let j = 0; j < buildings.length; j++) {
+        renderBuilding(buildings[j], div)
+    }
 
 }
 
@@ -137,6 +145,17 @@ function postBuilding(buildingData, propertyDiv) {
     })
 }
 
+function destroyProperty(propertyId, propertyDiv) {
+    fetch(`http://localhost:3000/properties/${propertyId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: "application/json"
+        }
+    });
+    propertyDiv.remove();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     fetch("http://localhost:3000/properties")
         .then(function(response) {
@@ -155,5 +174,8 @@ document.addEventListener("submit", (event) => {
 document.addEventListener("click", (event) => {
     if (event.target.className == "building_submit") {
         postBuilding(event.target.parentElement, event.target.parentElement.parentElement);
+    } else if (event.target.className == "property_destroy") {
+        console.log(event.target)
+        destroyProperty(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement)
     }
 })
