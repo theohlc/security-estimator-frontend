@@ -27,10 +27,19 @@ function renderProperty(propertyObj) {
 
     const buildings = propertyObj["buildings"]
     
+    renderBuildingForm(div, propertyObj);
 
+    for (let j = 0; j < buildings.length; j++) {
+        renderBuilding(buildings[j], div)
+    }
+
+}
+
+function renderBuildingForm(div, propertyObj) {
     const form = document.createElement("form");
     form.className = "buildingForm";
     form.id = propertyObj.id
+    form.style.display = "none"
 
     const num_ground_windows = document.createElement("input");
     num_ground_windows.setAttribute("type", "integer");
@@ -72,11 +81,6 @@ function renderProperty(propertyObj) {
     form.appendChild(br.cloneNode());
     form.appendChild(br.cloneNode());
     form.appendChild(building_submit);
-
-    for (let j = 0; j < buildings.length; j++) {
-        renderBuilding(buildings[j], div)
-    }
-
 }
 
 function renderBuilding(buildingObj, div) {
