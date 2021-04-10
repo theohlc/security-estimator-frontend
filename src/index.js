@@ -37,6 +37,8 @@ function renderProperty(propertyObj) {
     }
 
     const form = document.createElement("form");
+    form.className = "buildingForm";
+    form.id = propertyObj.id
 
     const num_ground_windows = document.createElement("input");
     num_ground_windows.setAttribute("type", "integer");
@@ -60,7 +62,8 @@ function renderProperty(propertyObj) {
 
     const building_submit    = document.createElement("button");
     building_submit.setAttribute("type", "button");
-    building_submit.textContent = "Add Building"
+    building_submit.className = "building_submit";
+    building_submit.textContent = "Add Building";
 
     const br = document.createElement("br");
 
@@ -102,6 +105,30 @@ function postProperty(propertyData) {
     })
 }
 
+function postBuilding(buildingData) {
+    fetch('http://localhost:3000/buildings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        "building_info" :
+            {"name"              : buildingData.name.value,
+            "num_ground_windows" : buildingData.num_ground_windows.value,
+            "num_high_windows"   : buildingData.num_high_windows.value,
+            "num_doors"          : buildingData.num_doors.value,
+            "num_vehicle_doors"  : buildingData.num_vehicle_doors.value,
+            "property_id"        : buildingData.id
+        }
+
+      })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     fetch("http://localhost:3000/properties")
         .then(function(response) {
@@ -115,4 +142,10 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("submit", (event) => {
     event.preventDefault();
     postProperty(event.target)
+})
+
+document.addEventListener("click", (event) => {
+    if (event.target.className == "building_submit") {
+        postBuilding(event.target.parentElement);
+    }
 })
