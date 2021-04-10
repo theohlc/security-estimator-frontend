@@ -11,6 +11,7 @@ function renderProperty(propertyObj) {
         document.createElement("div")
     )
     div.className = "property"
+    div.id        = propertyObj.id
 
     let h1 = document.createElement("h1")
     h1.innerText = propertyObj.name
@@ -20,20 +21,7 @@ function renderProperty(propertyObj) {
     const buildings = propertyObj["buildings"]
     
     for (let j = 0; j < buildings.length; j++) {
-        const building = buildings[j];
-        const buildingDiv = div.appendChild(
-            document.createElement("div")
-        )
-        buildingDiv.className = "buildings"
-        
-        let h2 = document.createElement("h2")
-        h2.innerText = building.name
-        let buildingBody = document.createElement("p")
-        buildingBody.innerText = 
-            `Cost to Secure: ${building.cost}`
-
-        buildingDiv.appendChild(h2)
-        buildingDiv.appendChild(buildingBody)
+        renderBuilding(buildings[j], div)
     }
 
     const form = document.createElement("form");
@@ -83,6 +71,22 @@ function renderProperty(propertyObj) {
 
 }
 
+function renderBuilding(buildingObj, div) {
+    const buildingDiv = div.appendChild(
+        document.createElement("div")
+    )
+    buildingDiv.className = "buildings"
+    
+    let h2 = document.createElement("h2")
+    h2.innerText = buildingObj.name
+    let buildingBody = document.createElement("p")
+    buildingBody.innerText = 
+        `Cost to Secure: ${buildingObj.cost}`
+
+    buildingDiv.appendChild(h2)
+    buildingDiv.appendChild(buildingBody)
+}
+
 function postProperty(propertyData) {
     fetch('http://localhost:3000/properties', {
       method: 'POST',
@@ -105,7 +109,7 @@ function postProperty(propertyData) {
     })
 }
 
-function postBuilding(buildingData) {
+function postBuilding(buildingData, propertyDiv) {
     fetch('http://localhost:3000/buildings', {
       method: 'POST',
       headers: {
@@ -127,6 +131,10 @@ function postBuilding(buildingData) {
     .then(function(response) {
         return response.json();
     })
+    .then(function(object) {
+
+        renderBuilding(object, propertyDiv)
+    })
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -146,6 +154,6 @@ document.addEventListener("submit", (event) => {
 
 document.addEventListener("click", (event) => {
     if (event.target.className == "building_submit") {
-        postBuilding(event.target.parentElement);
+        postBuilding(event.target.parentElement, event.target.parentElement.parentElement);
     }
 })
