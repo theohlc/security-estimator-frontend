@@ -30,6 +30,10 @@ class Property {
         return [];
     }*/
 
+    get propsBuildings() {
+        return buildings.filter(building => building.propertyId == this.id)
+    }
+
     render() {
         const div = propertiesDiv.appendChild(
             document.createElement("div")
@@ -57,8 +61,10 @@ class Property {
         showFormButton.textContent = "Add Building"
         div.appendChild(showFormButton)
 
-        for (let j = 0; j < buildings.length; j++) {
-            renderBuilding(buildings[j], div)
+        console.log(this.propsBuildings)
+
+        for (let j = 0; j < this.propsBuildings.length; j++) {
+            renderBuilding(this.propsBuildings[j], div)
         }
     
         const cost = document.createElement("p");
