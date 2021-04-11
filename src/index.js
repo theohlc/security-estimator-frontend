@@ -61,14 +61,12 @@ class Property {
         showFormButton.textContent = "Add Building"
         div.appendChild(showFormButton)
 
-        console.log(this.propsBuildings)
-
         for (let j = 0; j < this.propsBuildings.length; j++) {
-            renderBuilding(this.propsBuildings[j], div)
+            this.propsBuildings[j].render;
         }
     
         const cost = document.createElement("p");
-        cost.innerText = `Cost to fence: ${this.fence_cost}\n Total Cost to Secure Property: ${this.cost}`
+        cost.innerText = `Cost to fence: ${this._fenceCost}\n Total Cost to Secure Property: ${this._cost}`
         div.appendChild(cost)
     }
 
@@ -108,7 +106,7 @@ function populateBuildings(buildingsObj) {
     for (let i = 0; i < buildingsObj.length; i++) {
         const buildingJson = buildingsObj[i];
         const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
-        building.render();
+        //building.render();
     }
 }
 
