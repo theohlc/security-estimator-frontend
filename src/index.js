@@ -107,7 +107,7 @@ class Building {
         h2.appendChild(x)
         let buildingBody = document.createElement("p");
         buildingBody.innerText = 
-            `Cost to Secure: ${this.cost}`;
+            `Cost to Secure: ${this._cost}`;
     
         buildingDiv.appendChild(h2);
         buildingDiv.appendChild(buildingBody);
