@@ -1,13 +1,99 @@
-const properties = document.getElementById("Properties")
+const propertiesDiv = document.getElementById("Properties");
+let propertyIndex = 0;
+
+class Property {
+    constructor(name, fenceLength, id, cost){
+        this.name = name;
+        this.fenceLength = fenceLength;
+        this.id = id;
+        this._cost = cost;
+    }
+
+    get buildings() {
+        let buildingArray = [];
+
+        fetch(`http://localhost:3000/properties/${this.id}`)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(object) {
+            object.buildings
+            for (let i = 0; i < object.buildings.length; i++) {
+                const buildingJson = object.buildings[i];
+                const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
+                buildingArray.push(building);
+            }
+        })
+
+        return buildingArray;
+    }
+
+    render() {
+        const div = propertiesDiv.appendChild(
+            document.createElement("div")
+        )
+        div.className = "property"
+        div.id        = this.id
+    
+        let h1 = document.createElement("h1")
+        h1.innerText = this.name
+    
+        div.appendChild(h1)
+    
+        let x = document.createElement("button");
+        x.setAttribute("type", "button");
+        x.className = "property_destroy";
+        x.textContent = "X";
+    
+        h1.appendChild(x)
+        
+        renderBuildingForm(div, this);
+        const showFormButton = document.createElement("button");
+        showFormButton.setAttribute("type", "button");
+        showFormButton.setAttribute("class", "showFormButton");
+        showFormButton.setAttribute("id", this.id);
+        showFormButton.textContent = "Add Building"
+        div.appendChild(showFormButton)
+    
+        
+
+        for (let j = 0; j < this.buildings.length; j++) {
+            renderBuilding(this.buildings[j], div)
+        }
+    
+        const cost = document.createElement("p");
+        cost.innerText = `Cost to fence: ${this.fence_cost}\n Total Cost to Secure Property: ${this.cost}`
+        div.appendChild(cost)
+    }
+
+    create() {}
+
+    destroy() {}
+
+}
+
+class Building {
+    constructor(name, id, propertyId, numGroundWindows, numHighWindows, numDoors, numVehicleDoors, cost){
+        this.name = name;
+        this.id = id;
+        this.propertyId = propertyId;
+        this.numGroundWindows = numGroundWindows;
+        this.numHighWindows = numHighWindows;
+        this.numDoors = numDoors;
+        this.numVehicleDoors = numVehicleDoors;
+        this._cost = cost
+    }
+}
 
 function populateProperties(propertiesObj) {
     for (let i = 0; i < propertiesObj.length; i++) {
-        renderProperty(propertiesObj[i])
+        propertyObj = new Property(propertiesObj[i].name, propertiesObj[i].fence_length, propertiesObj[i].id, propertiesObj[i].cost);
+        propertyObj.render();
     }
 }
 
 function renderProperty(propertyObj) {
-    const div = properties.appendChild(
+    const div = propertiesDiv.appendChild(
         document.createElement("div")
     )
     div.className = "property"
