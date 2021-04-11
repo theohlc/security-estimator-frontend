@@ -4,11 +4,12 @@ let properties = [];
 let buildings = [];
 
 class Property {
-    constructor(name, fenceLength, id, cost){
+    constructor(name, fenceLength, id, cost, fenceCost){
         this.name = name;
         this.fenceLength = fenceLength;
         this.id = id;
         this._cost = cost;
+        this._fenceCost = fenceCost
         properties.push(this)
     }
 
@@ -70,9 +71,41 @@ class Property {
         div.appendChild(cost)
     }
 
-    create() {}
+    create() {
+        console.log(this)
+        fetch('http://localhost:3000/properties', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: "application/json"
+            },
+            body: JSON.stringify({
+                "property_info" :
+                    {"name"         : this.name,
+                    "fence_length"  : this.fenceLength}
+            })
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(object) {
+            const property = new Property(object.name, object.fence_length, object.id, object.cost, object.fence_cost);
+            property.render();
+        })
+    }
 
-    destroy() {}
+    destroy() {
+        console.log(this)
+        fetch(`http://localhost:3000/properties/${this.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: "application/json"
+        }
+        });
+        const propertyDiv = document.getElementById(this.id);
+        propertyDiv.remove();
+    }
 
 }
 
@@ -116,7 +149,7 @@ class Building {
 
 function populateProperties(propertiesObj) {
     for (let i = 0; i < propertiesObj.length; i++) {
-        const propertyObj = new Property(propertiesObj[i].name, propertiesObj[i].fence_length, propertiesObj[i].id, propertiesObj[i].cost);
+        const propertyObj = new Property(propertiesObj[i].name, propertiesObj[i].fence_length, propertiesObj[i].id, propertiesObj[i].cost, propertiesObj[i].fence_cost);
         propertyObj.render();
     }
 }
@@ -283,7 +316,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("submit", (event) => {
     event.preventDefault();
-    postProperty(event.target)
+    let property = new Property(event.target.name.value, event.target.fenceLength.value);
+    property.create();
 })
 
 document.addEventListener("click", (event) => {
@@ -292,7 +326,8 @@ document.addEventListener("click", (event) => {
         event.target.parentElement.style.display = "none";
         event.target.parentElement.parentElement.children[2].style.display = "";
     } else if (event.target.className == "property_destroy") {
-        destroyProperty(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement);
+        property = properties.filter(property => (property.id == event.target.parentElement.parentElement.id))[0]
+        property.destroy();
     } else if (event.target.className == "building_destroy") {
         destroyBuilding(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement);
     } else if (event.target.className == "showFormButton") {
