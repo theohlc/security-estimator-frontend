@@ -1,5 +1,7 @@
 const propertiesDiv = document.getElementById("Properties");
 let propertyIndex = 0;
+let properties = [];
+let buildings = [];
 
 class Property {
     constructor(name, fenceLength, id, cost){
@@ -7,9 +9,10 @@ class Property {
         this.fenceLength = fenceLength;
         this.id = id;
         this._cost = cost;
+        properties.push(this)
     }
 
-    get buildings() {
+    /*get buildings() {
         let buildingArray = [];
 
         fetch(`http://localhost:3000/properties/${this.id}`)
@@ -24,9 +27,8 @@ class Property {
                 buildingArray.push(building);
             }
         })
-
-        return buildingArray;
-    }
+        return [];
+    }*/
 
     render() {
         const div = propertiesDiv.appendChild(
@@ -54,11 +56,9 @@ class Property {
         showFormButton.setAttribute("id", this.id);
         showFormButton.textContent = "Add Building"
         div.appendChild(showFormButton)
-    
-        
 
-        for (let j = 0; j < this.buildings.length; j++) {
-            renderBuilding(this.buildings[j], div)
+        for (let j = 0; j < buildings.length; j++) {
+            renderBuilding(buildings[j], div)
         }
     
         const cost = document.createElement("p");
@@ -81,14 +81,28 @@ class Building {
         this.numHighWindows = numHighWindows;
         this.numDoors = numDoors;
         this.numVehicleDoors = numVehicleDoors;
-        this._cost = cost
+        this._cost = cost;
+
+        buildings.push(this);
+    }
+
+    render() {
+        
     }
 }
 
 function populateProperties(propertiesObj) {
     for (let i = 0; i < propertiesObj.length; i++) {
-        propertyObj = new Property(propertiesObj[i].name, propertiesObj[i].fence_length, propertiesObj[i].id, propertiesObj[i].cost);
+        const propertyObj = new Property(propertiesObj[i].name, propertiesObj[i].fence_length, propertiesObj[i].id, propertiesObj[i].cost);
         propertyObj.render();
+    }
+}
+
+function populateBuildings(buildingsObj) {
+    for (let i = 0; i < buildingsObj.length; i++) {
+        const buildingJson = buildingsObj[i];
+        const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
+        building.render();
     }
 }
 
@@ -294,8 +308,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return response.json();
         })
         .then(function(object) {
-                populateProperties(object)
+            populateProperties(object)
+        });
+    fetch("http://localhost:3000/buildings")
+        .then(function(response) {
+            return response.json();
         })
+        .then(function(object) {
+            populateBuildings(object)
+        });
 })
 
 document.addEventListener("submit", (event) => {
