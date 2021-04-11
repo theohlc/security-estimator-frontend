@@ -62,7 +62,7 @@ class Property {
         div.appendChild(showFormButton)
 
         for (let j = 0; j < this.propsBuildings.length; j++) {
-            this.propsBuildings[j].render;
+            this.propsBuildings[j].render();
         }
     
         const cost = document.createElement("p");
@@ -91,7 +91,26 @@ class Building {
     }
 
     render() {
+        const div = document.getElementById(this.propertyId)
+        const buildingDiv = div.appendChild(
+            document.createElement("div")
+        )
+        buildingDiv.className = "buildings";
+        buildingDiv.id = this.id;
         
+        let h2 = document.createElement("h2");
+        h2.innerText = this.name;
+        let x = document.createElement("button");
+        x.setAttribute("type", "button");
+        x.className = "building_destroy";
+        x.textContent = "X";
+        h2.appendChild(x)
+        let buildingBody = document.createElement("p");
+        buildingBody.innerText = 
+            `Cost to Secure: ${this.cost}`;
+    
+        buildingDiv.appendChild(h2);
+        buildingDiv.appendChild(buildingBody);
     }
 }
 
@@ -210,28 +229,6 @@ function renderBuildingForm(div, propertyObj) {
     form.appendChild(br.cloneNode());
     form.appendChild(br.cloneNode());
     form.appendChild(building_submit);
-}
-
-function renderBuilding(buildingObj, div) {
-    const buildingDiv = div.appendChild(
-        document.createElement("div")
-    )
-    buildingDiv.className = "buildings";
-    buildingDiv.id = buildingObj.id;
-    
-    let h2 = document.createElement("h2");
-    h2.innerText = buildingObj.name;
-    let x = document.createElement("button");
-    x.setAttribute("type", "button");
-    x.className = "building_destroy";
-    x.textContent = "X";
-    h2.appendChild(x)
-    let buildingBody = document.createElement("p");
-    buildingBody.innerText = 
-        `Cost to Secure: ${buildingObj.cost}`;
-
-    buildingDiv.appendChild(h2);
-    buildingDiv.appendChild(buildingBody);
 }
 
 function postProperty(propertyData) {
