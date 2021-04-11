@@ -129,45 +129,6 @@ function populateBuildings(buildingsObj) {
     }
 }
 
-function renderProperty(propertyObj) {
-    const div = propertiesDiv.appendChild(
-        document.createElement("div")
-    )
-    div.className = "property"
-    div.id        = propertyObj.id
-
-    let h1 = document.createElement("h1")
-    h1.innerText = propertyObj.name
-
-    div.appendChild(h1)
-
-    let x = document.createElement("button");
-    x.setAttribute("type", "button");
-    x.className = "property_destroy";
-    x.textContent = "X";
-
-    h1.appendChild(x)
-
-    const buildings = propertyObj["buildings"]
-    
-    renderBuildingForm(div, propertyObj);
-    showFormButton = document.createElement("button");
-    showFormButton.setAttribute("type", "button");
-    showFormButton.setAttribute("class", "showFormButton");
-    showFormButton.setAttribute("id", propertyObj.id);
-    showFormButton.textContent = "Add Building"
-    div.appendChild(showFormButton)
-
-    for (let j = 0; j < buildings.length; j++) {
-        renderBuilding(buildings[j], div)
-    }
-
-    cost = document.createElement("p");
-    cost.innerText = `Cost to fence: ${propertyObj.fence_cost}\n Total Cost to Secure Property: ${propertyObj.cost}`
-    div.appendChild(cost)
-
-}
-
 function renderBuildingForm(div, propertyObj) {
     const form = document.createElement("form");
     form.className = "buildingForm";
