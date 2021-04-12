@@ -260,10 +260,12 @@ class Building {
 }
 
 function populateProperties(propertiesObj) {
-    for (let i = 0; i < propertiesObj.length; i++) {
-        const propertyObj = new Property(propertiesObj[i].name, propertiesObj[i].fence_length, propertiesObj[i].id, propertiesObj[i].cost, propertiesObj[i].fence_cost);
-        propertyObj.render();
-    }
+    setTimeout(() => {
+        for (let i = 0; i < propertiesObj.length; i++) {
+            const propertyObj = new Property(propertiesObj[i].name, propertiesObj[i].fence_length, propertiesObj[i].id, propertiesObj[i].cost, propertiesObj[i].fence_cost);
+            propertyObj.render();
+        }
+    }, 50);
 }
 
 function populateBuildings(buildingsObj) {
