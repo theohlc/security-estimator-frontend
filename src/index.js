@@ -317,94 +317,22 @@ function renderBuildingForm(div, propertyObj) {
     form.appendChild(building_submit);
 }
 
-/*function postProperty(propertyData) {
-    fetch('http://localhost:3000/properties', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: "application/json"
-      },
-      body: JSON.stringify({
-        "property_info" :
-            {"name"         : propertyData.name.value,
-            "fence_length"  : propertyData.fence_length.value}
-
-      })
-    })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(object) {
-        renderProperty(object)
-    })
-}*/
-
-/*function postBuilding(buildingData, propertyDiv) {
-    fetch('http://localhost:3000/buildings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: "application/json"
-      },
-      body: JSON.stringify({
-        "building_info" :
-            {"name"              : buildingData.name.value,
-            "num_ground_windows" : buildingData.num_ground_windows.value,
-            "num_high_windows"   : buildingData.num_high_windows.value,
-            "num_doors"          : buildingData.num_doors.value,
-            "num_vehicle_doors"  : buildingData.num_vehicle_doors.value,
-            "property_id"        : buildingData.id
-        }
-
-      })
-    })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(object) {
-        renderBuilding(object, propertyDiv);
-    })
-}*/
-
-/*function destroyProperty(propertyId, propertyDiv) {
-    fetch(`http://localhost:3000/properties/${propertyId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: "application/json"
-        }
-    });
-    propertyDiv.remove();
-}*/
-
-/*function destroyBuilding(buildingId, buildingDiv) {
-    fetch(`http://localhost:3000/buildings/${buildingId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: "application/json"
-        }
-    });
-    buildingDiv.remove();
-}*/
-
 fetch("http://localhost:3000/properties")
-.then(function(response) {
-    return response.json();
-})
-.then(function(object) {
-    populateProperties(object)
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    fetch("http://localhost:3000/buildings")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(object) {
+        populateProperties(object)
+    })
+    .then(
+        fetch("http://localhost:3000/buildings")
         .then(function(response) {
             return response.json();
         })
         .then(function(object) {
             populateBuildings(object)
-        });
-})
+        })
+    );
 
 document.addEventListener("submit", (event) => {
     event.preventDefault();
