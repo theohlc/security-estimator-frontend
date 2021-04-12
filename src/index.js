@@ -167,7 +167,6 @@ class Property {
                 return response.json();
             })
             .then(function(object) {
-                console.log(object)
                 div.getElementsByClassName('cost')[0].innerText =  `Cost to fence: ${object.fenceCost}\nTotal Cost to Secure Property: ${object.cost}`
             });
         }, 500);
