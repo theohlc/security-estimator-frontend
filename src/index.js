@@ -54,7 +54,7 @@ class Property {
     
         h1.appendChild(x)
         
-        renderBuildingForm(div, this);
+        this.renderBuildingForm();
         const showFormButton = document.createElement("button");
         showFormButton.setAttribute("type", "button");
         showFormButton.setAttribute("class", "showFormButton");
@@ -69,6 +69,71 @@ class Property {
         const cost = document.createElement("p");
         cost.innerText = `Cost to fence: ${this._fenceCost}\n Total Cost to Secure Property: ${this._cost}`
         div.appendChild(cost)
+    }
+
+    renderBuildingForm() {
+        const div = document.getElementById(this.id)
+
+        const form = document.createElement("form");
+        form.className = "buildingForm";
+        form.id = this.id
+        form.style.display = "none"
+
+        const num_ground_windows = document.createElement("input");
+        num_ground_windows.setAttribute("type", "integer");
+        num_ground_windows.setAttribute("name", "num_ground_windows");
+        const ngwLabel = document.createElement("label");
+        ngwLabel.innerText = "Number of Ground Level Windows:";
+
+        const num_high_windows   = document.createElement("input");
+        num_high_windows.setAttribute("type", "integer");
+        num_high_windows.setAttribute("name", "num_high_windows");
+        const nhwLabel = document.createElement("label");
+        nhwLabel.innerText = "Number of Inaccessible Windows:";
+
+        const name               = document.createElement("input");
+        name.setAttribute("type", "text");
+        name.setAttribute("name", "name");
+        const nameLabel = document.createElement("label");
+        nameLabel.innerText = "Name of Building:";
+
+        const num_doors          = document.createElement("input");
+        num_doors.setAttribute("type", "integer");
+        num_doors.setAttribute("name", "num_doors");
+        const ndLabel = document.createElement("label");
+        ndLabel.innerText = "Number of Doors:";
+
+        const num_vehicle_doors  = document.createElement("input");
+        num_vehicle_doors.setAttribute("type", "integer");
+        num_vehicle_doors.setAttribute("name", "num_vehicle_doors");
+        const nvdLabel = document.createElement("label");
+        nvdLabel.innerText = "Number of Large (vehichle, loading, livestock) Doors:";
+
+        const building_submit    = document.createElement("button");
+        building_submit.setAttribute("type", "button");
+        building_submit.className = "building_submit";
+        building_submit.textContent = "Add Building";
+
+        const br = document.createElement("br");
+
+        div.appendChild(form);
+        form.appendChild(nameLabel);
+        form.appendChild(name);
+        form.appendChild(br.cloneNode());
+        form.appendChild(ngwLabel);
+        form.appendChild(num_ground_windows);
+        form.appendChild(br.cloneNode());
+        form.appendChild(nhwLabel);
+        form.appendChild(num_high_windows);
+        form.appendChild(br.cloneNode());
+        form.appendChild(ndLabel);
+        form.appendChild(num_doors);
+        form.appendChild(br.cloneNode());
+        form.appendChild(nvdLabel);
+        form.appendChild(num_vehicle_doors);
+        form.appendChild(br.cloneNode());
+        form.appendChild(br.cloneNode());
+        form.appendChild(building_submit);
     }
 
     create() {
@@ -172,6 +237,7 @@ class Building {
             building.render();
         })
     }
+
 }
 
 function populateProperties(propertiesObj) {
