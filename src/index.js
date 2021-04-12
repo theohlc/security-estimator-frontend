@@ -12,7 +12,7 @@ class Property {
         this._fenceCost = fenceCost
         properties.push(this)
     }
-    
+
     get propsBuildings() {
         return buildings.filter(building => building.propertyId == this.id)
     }
@@ -49,6 +49,7 @@ class Property {
         }
     
         const cost = document.createElement("p");
+        cost.className = 'cost'
         cost.innerText = `Cost to fence: ${this._fenceCost}\n Total Cost to Secure Property: ${this._cost}`
         div.appendChild(cost)
     }
@@ -141,7 +142,6 @@ class Property {
     }
 
     destroy() {
-        console.log(this)
         fetch(`http://localhost:3000/properties/${this.id}`, {
         method: 'DELETE',
         headers: {
@@ -151,6 +151,26 @@ class Property {
         });
         const propertyDiv = document.getElementById(this.id);
         propertyDiv.remove();
+    }
+
+    reRender() {
+        const div = document.getElementById(this.id);
+        setTimeout(() => {
+            fetch(`http://localhost:3000/properties/${this.id}/cost`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: "application/json"
+            }
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(object) {
+                console.log(object)
+                div.getElementsByClassName('cost')[0].innerText =  `Cost to fence: ${object.fenceCost}\nTotal Cost to Secure Property: ${object.cost}`
+            });
+        }, 500);
     }
 
 }
@@ -218,6 +238,23 @@ class Building {
             const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
             building.render();
         })
+
+        const property = properties.filter(property => property.id == this.propertyId)[0];
+        property.reRender(), 5000
+    }
+
+    destroy(element){
+        fetch(`http://localhost:3000/buildings/${this.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: "application/json"
+        }
+        });
+        element.remove();
+
+        const property = properties.filter(property => property.id == this.propertyId)[0];
+        property.reRender()
     }
 
 }
@@ -279,7 +316,8 @@ document.addEventListener("click", (event) => {
         property = properties.filter(property => (property.id == event.target.parentElement.parentElement.id))[0]
         property.destroy();
     } else if (event.target.className == "building_destroy") {
-        destroyBuilding(event.target.parentElement.parentElement.id, event.target.parentElement.parentElement);
+        building = buildings.filter(building => (building.id == event.target.parentElement.parentElement.id))[0]
+        building.destroy(event.target.parentElement.parentElement);
     } else if (event.target.className == "showFormButton") {
         event.target.parentElement.children[1].style.display = "";
         event.target.style.display = "none";
