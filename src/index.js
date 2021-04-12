@@ -72,7 +72,6 @@ class Property {
     }
 
     create() {
-        console.log(this)
         fetch('http://localhost:3000/properties', {
             method: 'POST',
             headers: {
@@ -125,8 +124,8 @@ class Building {
 
     render() {
         const div = document.getElementById(this.propertyId)
-        const buildingDiv = div.appendChild(
-            document.createElement("div")
+        const buildingDiv = div.insertBefore(
+            document.createElement("div"), div.children[3]
         )
         buildingDiv.className = "buildings";
         buildingDiv.id = this.id;
@@ -145,6 +144,34 @@ class Building {
         buildingDiv.appendChild(h2);
         buildingDiv.appendChild(buildingBody);
     }
+
+    create() {
+        fetch('http://localhost:3000/buildings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: "application/json"
+            },
+            body: JSON.stringify({
+              "building_info" :
+                  {"name"              : this.name,
+                  "num_ground_windows" : this.numGroundWindows,
+                  "num_high_windows"   : this.numHighWindows,
+                  "num_doors"          : this.numDoors,
+                  "num_vehicle_doors"  : this.numVehicleDoors,
+                  "property_id"        : this.propertyId
+              }
+      
+            })
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(buildingJson) {
+            const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
+            building.render();
+        })
+    }
 }
 
 function populateProperties(propertiesObj) {
@@ -158,7 +185,6 @@ function populateBuildings(buildingsObj) {
     for (let i = 0; i < buildingsObj.length; i++) {
         const buildingJson = buildingsObj[i];
         const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
-        //building.render();
     }
 }
 
@@ -225,7 +251,7 @@ function renderBuildingForm(div, propertyObj) {
     form.appendChild(building_submit);
 }
 
-function postProperty(propertyData) {
+/*function postProperty(propertyData) {
     fetch('http://localhost:3000/properties', {
       method: 'POST',
       headers: {
@@ -245,9 +271,9 @@ function postProperty(propertyData) {
     .then(function(object) {
         renderProperty(object)
     })
-}
+}*/
 
-function postBuilding(buildingData, propertyDiv) {
+/*function postBuilding(buildingData, propertyDiv) {
     fetch('http://localhost:3000/buildings', {
       method: 'POST',
       headers: {
@@ -270,12 +296,11 @@ function postBuilding(buildingData, propertyDiv) {
         return response.json();
     })
     .then(function(object) {
-
-        renderBuilding(object, propertyDiv)
+        renderBuilding(object, propertyDiv);
     })
-}
+}*/
 
-function destroyProperty(propertyId, propertyDiv) {
+/*function destroyProperty(propertyId, propertyDiv) {
     fetch(`http://localhost:3000/properties/${propertyId}`, {
         method: 'DELETE',
         headers: {
@@ -284,9 +309,9 @@ function destroyProperty(propertyId, propertyDiv) {
         }
     });
     propertyDiv.remove();
-}
+}*/
 
-function destroyBuilding(buildingId, buildingDiv) {
+/*function destroyBuilding(buildingId, buildingDiv) {
     fetch(`http://localhost:3000/buildings/${buildingId}`, {
         method: 'DELETE',
         headers: {
@@ -295,16 +320,17 @@ function destroyBuilding(buildingId, buildingDiv) {
         }
     });
     buildingDiv.remove();
-}
+}*/
+
+fetch("http://localhost:3000/properties")
+.then(function(response) {
+    return response.json();
+})
+.then(function(object) {
+    populateProperties(object)
+});
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("http://localhost:3000/properties")
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(object) {
-            populateProperties(object)
-        });
     fetch("http://localhost:3000/buildings")
         .then(function(response) {
             return response.json();
@@ -316,13 +342,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("submit", (event) => {
     event.preventDefault();
-    let property = new Property(event.target.name.value, event.target.fenceLength.value);
+    const property = new Property(event.target.name.value, event.target.fenceLength.value);
     property.create();
 })
 
 document.addEventListener("click", (event) => {
     if (event.target.className == "building_submit") {
-        postBuilding(event.target.parentElement, event.target.parentElement.parentElement);
+        //postBuilding(event.target.parentElement, event.target.parentElement.parentElement);
+        const building = new Building(
+            event.target.parentElement.name.value,
+            0,
+            event.target.parentElement.parentElement.id,
+            event.target.parentElement.num_ground_windows.value,
+            event.target.parentElement.num_high_windows.value,
+            event.target.parentElement.num_doors.value,
+            event.target.parentElement.num_vehicle_doors.value
+            );
+        building.create();
+        
         event.target.parentElement.style.display = "none";
         event.target.parentElement.parentElement.children[2].style.display = "";
     } else if (event.target.className == "property_destroy") {
