@@ -12,25 +12,7 @@ class Property {
         this._fenceCost = fenceCost
         properties.push(this)
     }
-
-    /*get buildings() {
-        let buildingArray = [];
-
-        fetch(`http://localhost:3000/properties/${this.id}`)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(object) {
-            object.buildings
-            for (let i = 0; i < object.buildings.length; i++) {
-                const buildingJson = object.buildings[i];
-                const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
-                buildingArray.push(building);
-            }
-        })
-        return [];
-    }*/
-
+    
     get propsBuildings() {
         return buildings.filter(building => building.propertyId == this.id)
     }
@@ -252,69 +234,6 @@ function populateBuildings(buildingsObj) {
         const buildingJson = buildingsObj[i];
         const building = new Building(buildingJson.name, buildingJson.id, buildingJson.property_id, buildingJson.num_ground_windows, buildingJson.num_high_windows, buildingJson.num_doors, buildingJson.num_vehicle_doors, buildingJson.cost);
     }
-}
-
-function renderBuildingForm(div, propertyObj) {
-    const form = document.createElement("form");
-    form.className = "buildingForm";
-    form.id = propertyObj.id
-    form.style.display = "none"
-
-    const num_ground_windows = document.createElement("input");
-    num_ground_windows.setAttribute("type", "integer");
-    num_ground_windows.setAttribute("name", "num_ground_windows");
-    const ngwLabel = document.createElement("label");
-    ngwLabel.innerText = "Number of Ground Level Windows:";
-
-    const num_high_windows   = document.createElement("input");
-    num_high_windows.setAttribute("type", "integer");
-    num_high_windows.setAttribute("name", "num_high_windows");
-    const nhwLabel = document.createElement("label");
-    nhwLabel.innerText = "Number of Inaccessible Windows:";
-
-    const name               = document.createElement("input");
-    name.setAttribute("type", "text");
-    name.setAttribute("name", "name");
-    const nameLabel = document.createElement("label");
-    nameLabel.innerText = "Name of Building:";
-
-    const num_doors          = document.createElement("input");
-    num_doors.setAttribute("type", "integer");
-    num_doors.setAttribute("name", "num_doors");
-    const ndLabel = document.createElement("label");
-    ndLabel.innerText = "Number of Doors:";
-
-    const num_vehicle_doors  = document.createElement("input");
-    num_vehicle_doors.setAttribute("type", "integer");
-    num_vehicle_doors.setAttribute("name", "num_vehicle_doors");
-    const nvdLabel = document.createElement("label");
-    nvdLabel.innerText = "Number of Large (vehichle, loading, livestock) Doors:";
-
-    const building_submit    = document.createElement("button");
-    building_submit.setAttribute("type", "button");
-    building_submit.className = "building_submit";
-    building_submit.textContent = "Add Building";
-
-    const br = document.createElement("br");
-
-    div.appendChild(form);
-    form.appendChild(nameLabel);
-    form.appendChild(name);
-    form.appendChild(br.cloneNode());
-    form.appendChild(ngwLabel);
-    form.appendChild(num_ground_windows);
-    form.appendChild(br.cloneNode());
-    form.appendChild(nhwLabel);
-    form.appendChild(num_high_windows);
-    form.appendChild(br.cloneNode());
-    form.appendChild(ndLabel);
-    form.appendChild(num_doors);
-    form.appendChild(br.cloneNode());
-    form.appendChild(nvdLabel);
-    form.appendChild(num_vehicle_doors);
-    form.appendChild(br.cloneNode());
-    form.appendChild(br.cloneNode());
-    form.appendChild(building_submit);
 }
 
 fetch("http://localhost:3000/properties")
