@@ -299,7 +299,6 @@ document.addEventListener("submit", (event) => {
 
 document.addEventListener("click", (event) => {
     if (event.target.className == "building_submit") {
-        //postBuilding(event.target.parentElement, event.target.parentElement.parentElement);
         const building = new Building(
             event.target.parentElement.name.value,
             0,
