@@ -239,7 +239,7 @@ class Building {
         })
 
         const property = properties.filter(property => property.id == this.propertyId)[0];
-        property.reRender(), 5000
+        property.reRender()
     }
 
     destroy(element){
